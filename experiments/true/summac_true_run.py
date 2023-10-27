@@ -5,22 +5,22 @@ from tqdm import tqdm
 import nltk
 from summac.model_summac import SummaCZS, SummaCConv
 
-files = ['begin_dev_download.csv',
-         'dialfact_valid_download.csv',
-         'fever_dev_download.csv',
-         'frank_valid_download.csv',
-         'mnbm_download.csv',
-         'paws_download.csv',
-         'q2_download.csv',
-         'qags_cnndm_download.csv',
-         'qags_xsum_download.csv',
-         'summeval_download.csv',
-         'vitc_dev_download.csv',
+files = ['begin.csv',
+         'dialfact.csv',
+         'fever.csv',
+         'frank.csv',
+         'mnbm.csv',
+         'paws.csv',
+         'q2.csv',
+         'qags_cnndm.csv',
+         'qags_xsum.csv',
+         'summeval.csv',
+         'vitc.csv',
         ]
 
 data = {}
 for f in files:
-    data[f.split('_download')[0]] = pd.read_csv('../'+f)
+    data[f.split('.')[0]] = pd.read_csv('../../data/true/'+f)
     
 model_zs = SummaCZS(granularity="sentence", model_name="vitc", device="cuda") # If you have a GPU: switch to: device="cuda"
 model_conv = SummaCConv(models=["vitc"], bins='percentile', granularity="sentence", nli_labels="e", device="cuda", start_file="default", agg="mean")
