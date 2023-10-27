@@ -61,7 +61,7 @@ def sentli_score(
     window_size: float = 0.25,
 ) -> dict:
     """
-    Flan-T5 NLI Precision and Recall Calculation
+    Sentli NLI Precision and Recall Calculation
     Args:
         - :param: 'model' (T5ForConditionalGeneration): Flan-T5 model used to score
         - :param: 'tokenizer' (T5Tokenizer): Flan-T5 tokenizer associated with model
@@ -140,7 +140,7 @@ def score(
     window_size: float = 0.25,
 ) -> dict:
     """
-    Flan-T5 Score
+    Sentli Score
     Takes in a list of conversations, their associated summary sentences, and their reference gold summary sentences.
     Calculates Precision, Recall, and F1-Scores.
     Args:
@@ -244,7 +244,7 @@ class SentliScorer:
         window_size: float = 0.25,
     ) -> dict:
         """
-        Flan-T5 Score
+        Sentli Score
         Takes in a list of conversations, their associated summary sentences, and their reference
             gold summary sentences.
         Calculates Precision, Recall, and F1-Scores.

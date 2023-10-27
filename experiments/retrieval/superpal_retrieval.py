@@ -56,5 +56,5 @@ for i in tqdm(range(len(convo))):
     r1 = int(rank_list[0] in rel_utts[i])
     retrieval = [r1]
     res_sp.append({'rank_list':rank_list, 'scores':scores, 'rel_utts':rel_utts[i], 'retrieval':retrieval, 'time':t1-t0})
-    with open('superpal_result.json', 'w') as file:
+    with open('results/superpal_retrieval.json', 'w') as file:
         json.dump(res_sp, file)

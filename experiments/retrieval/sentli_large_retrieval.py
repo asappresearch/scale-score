@@ -1,14 +1,14 @@
 import json
 import numpy as np
 import pandas as pd
-import time
 from tqdm import tqdm
-from scale_score import SCALEScorer
+import time
+from sentli_retrieval import SentliScorer
 
 with open('../../data/screen_eval.json', 'r') as file:
     data=json.load(file)
     
-fetch = SCALEScorer(size='xl')
+fetch = SentliScorer(size='xl')
 
 rank_list = []
 scores = []
@@ -22,19 +22,17 @@ assert len(summaries) == len(convo)
 
 res = []
 for i in tqdm(range(len(convo))):
-    rank_list = []
-    scores = []
     summary = summaries[i]
-    
     t0=time.time()
-    results = fetch.retrieve([convo[i]], [[summary]], branches=2)
-    t1 = time.time()
-    rel_utt_idx = convo_for_mod[i].index(results['utts'][0][0])
-    rank_list.append(rel_utt_idx)
-    scores.append(results['scores'][0])
+    results = fetch.score([convo[i]], [[summary]], retrieval=True, retrieval_top_k=1)
+    t1=time.time()
+    sorted_results = [(convo_for_mod[i].index(x[0]), x[1]) for x in results['P_reference'][0][0]]
+    sorted_results.sort(key=lambda x: x[1], reverse=True)
+    rank_list = [x[0] for x in sorted_results]
+    scores = [x[1] for x in sorted_results]
      
     r1 = int(rank_list[0] in rel_utts[i])
     retrieval = [r1]
     res.append({'rank_list':rank_list, 'scores':scores, 'rel_utts':rel_utts[i], 'retrieval':retrieval, 'time':t1-t0})
-    with open('time_xl.json', 'w') as file:
+    with open('results/sentli_retrieval.json', 'w') as file:
         json.dump(res, file)

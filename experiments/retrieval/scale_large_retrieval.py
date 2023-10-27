@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 import time
 from tqdm import tqdm
-from flan_t5_retrieval import FlanT5Retrieval
+from scale_score.scorer import SCALEScorer
 
 with open('../../data/screen_eval.json', 'r') as file:
     data=json.load(file)
     
-fetch = FlanT5Retrieval(size='large')
+fetch = SCALEScorer(size='large')
 
 rank_list = []
 scores = []
@@ -27,7 +27,7 @@ for i in tqdm(range(len(convo))):
     summary = summaries[i]
     
     t0=time.time()
-    results = fetch.score([convo[i]], [[summary]], chunk_size=4)
+    results = fetch.retrieve([convo[i]], [[summary]], branches=2)
     t1 = time.time()
     rel_utt_idx = convo_for_mod[i].index(results['utts'][0][0])
     rank_list.append(rel_utt_idx)
@@ -36,5 +36,5 @@ for i in tqdm(range(len(convo))):
     r1 = int(rank_list[0] in rel_utts[i])
     retrieval = [r1]
     res.append({'rank_list':rank_list, 'scores':scores, 'rel_utts':rel_utts[i], 'retrieval':retrieval, 'time':t1-t0})
-    with open('large_time.json', 'w') as file:
+    with open('results/scale_large_retrieval.json', 'w') as file:
         json.dump(res, file)

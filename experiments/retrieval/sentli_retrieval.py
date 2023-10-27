@@ -242,7 +242,7 @@ def get_flan_T5_model(
     return model, tokenizer
 
 
-def flan_T5_score(
+def sentli_score(
     model: T5ForConditionalGeneration,
     tokenizer: T5Tokenizer,
     convo: List[List[str]],
@@ -256,7 +256,7 @@ def flan_T5_score(
     window_size: float = 0.25,
 ) -> dict:
     """
-    Flan-T5 NLI Precision and Recall Calculation
+    Sentli Precision and Recall Calculation
     Args:
         - :param: 'model' (T5ForConditionalGeneration): Flan-T5 model used to score
         - :param: 'tokenizer' (T5Tokenizer): Flan-T5 tokenizer associated with model
@@ -431,7 +431,7 @@ def score(
     window_size: float = 0.25,
 ) -> dict:
     """
-    Flan-T5 Score
+    Sentli Score
     Takes in a list of conversations, their associated summary sentences, and their reference gold summary sentences.
     Calculates Precision, Recall, and F1-Scores.
     Args:
@@ -479,7 +479,7 @@ def score(
 
     model = model.eval()
 
-    results = flan_T5_score(
+    results = sentli_score(
         model,
         tokenizer,
         convos,
@@ -521,25 +521,11 @@ def score(
 
 
 
-class FlanT5Scorer:
-    """
-    FlanT5 Scorer object
-    """
+class SentliScorer:
 
     def __init__(
         self, size: str = "xl", model_path: Optional[str] = None, device: "str" = "cuda"
     ) -> None:
-        """
-        FlanT5 Score Init
-        Builds a scorer object
-        Args:
-            - :param: 'size' (str): Size of FlanT5 model, options are 'small', 'base', 'large', 'xl', 'xxl'
-            - :param: 'device' (str): device to send the model to, by default is 'cuda'
-            - :param: 'model_path' (str): Optional model path to load a model
-        Return:
-            - :param: '(P, R, F)' tuple(float, float, float): Precision, Recall, and F1-Scores. If only_precision
-                is true, tuple(float, None, None)
-        """
         self.model, self.tokenizer = get_flan_T5_model(size, model_path)
         self.model = self.model.eval()
         self.model_size = size
@@ -559,7 +545,7 @@ class FlanT5Scorer:
         window_size: float = 0.25,
     ) -> dict:
         """
-        Flan-T5 Score
+        Sentli
         Takes in a list of conversations, their associated summary sentences, and their reference
             gold summary sentences.
         Calculates Precision, Recall, and F1-Scores.
