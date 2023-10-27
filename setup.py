@@ -1,6 +1,13 @@
 from io import open
 
 from setuptools import find_packages, setup
+from pathlib import Path
+
+
+REQUIREMENTS_PATH = Path(__file__).resolve().parent / "requirements.txt"
+
+with open(str(REQUIREMENTS_PATH), "r", encoding="utf-8") as f:
+    requirements = f.read().splitlines()
 
 setup(
     name="scale-score",
@@ -14,16 +21,7 @@ setup(
     license="MIT",
     url="https://github.com/asappresearch/scale-score",
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
-    install_requires=[
-        "transformers>=4.21.1",
-        "torch>=1.10.0",
-        "numpy>=1.22.4",
-        "tqdm>=4.64.1",
-        "sentencepiece>=0.1.97",
-        "accelerate>=0.17.1",
-        "scikit-learn>=1.1.3",
-        "scipy>=1.9.3",
-    ],
+    install_requires=requirements,
     include_package_data=True,
     python_requires=">=3.6",
     tests_require=["pytest"],
