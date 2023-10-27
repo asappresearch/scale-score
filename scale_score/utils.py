@@ -1,5 +1,5 @@
 import math
-from typing import List, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -60,15 +60,15 @@ def get_chunks(
 
 
 def get_retrieval_chunks(
-    tokenizer: T5Tokenizer, joined_convo: str, prompt: str, branches: Optional[int] = 2
-) -> List[torch.Tensor]:
-    num_sents = len(joined_convo)
+    tokenizer: T5Tokenizer, convo: List[str], prompt: str, branches: int = 2
+) -> Tuple[List[Any], List[List[str]]]:
+    num_sents = len(convo)
     if num_sents == 1:
         return [
             tokenizer(
-                prompt.replace("{{premise}}", joined_convo[0]), return_tensors="pt"
+                prompt.replace("{{premise}}", convo[0]), return_tensors="pt"
             ).input_ids
-        ], [joined_convo]
+        ], [convo]
 
     interval = num_sents // branches
     if interval == 0:
@@ -77,8 +77,8 @@ def get_retrieval_chunks(
     cs = []
     ranges = []
     for i in range(0, num_sents, interval):
-        ranges.append(joined_convo[(i) : (interval + i)])
-        pmp = " ".join(joined_convo[(i) : (interval + i)])
+        ranges.append(convo[(i) : (interval + i)])
+        pmp = " ".join(convo[(i) : (interval + i)])
         cs.append(
             tokenizer(prompt.replace("{{premise}}", pmp), return_tensors="pt").input_ids
         )
@@ -89,17 +89,17 @@ def get_retrieval_chunks(
 def run_model_chunks(
     model: T5ForConditionalGeneration,
     tokenizer: T5Tokenizer,
-    premise: str,
+    premise: List[str],
     prompt: str,
     yes_no_tokens: List[int],
     device: str,
-    chunk_size: Optional[int] = 512,
-    window_size: Optional[float] = 0.25,
+    chunk_size: int = 512,
+    window_size: float = 0.25,
     branches: Optional[int] = None,
-) -> Tuple[List[float], Optional[List[str]]]:
+) -> Tuple[List[float], Optional[List[List[str]]]]:
     if branches is None:
         texts = None
-        chunks = get_chunks(tokenizer, premise, prompt, chunk_size, window_size)
+        chunks = get_chunks(tokenizer, premise[0], prompt, chunk_size, window_size)
     else:
         chunks, texts = get_retrieval_chunks(tokenizer, premise, prompt, branches)
     chunk_results = []
@@ -308,7 +308,7 @@ def scale_score(
             chunk_results, _ = run_model_chunks(
                 model=model,
                 tokenizer=tokenizer,
-                premise=premise[i],
+                premise=[premise[i]],
                 prompt=prompt_part_filled,
                 chunk_size=chunk_size,
                 window_size=window_size,
@@ -360,7 +360,8 @@ def scale_retrieve(
                 yes_no_tokens=yes_no_tokens,
                 device=device,
             )
-
+            if texts is None:
+                raise ValueError("texts cannot be None")
             max_chunk = np.argmax(chunk_results)
             utts = texts[max_chunk]
             # Optionally continue descending
@@ -374,7 +375,8 @@ def scale_retrieve(
                     yes_no_tokens=yes_no_tokens,
                     device=device,
                 )
-
+                if texts is None:
+                    raise ValueError("texts cannot be None")
                 max_chunk = np.argmax(chunk_results)
                 utts = texts[max_chunk]
 

@@ -1,6 +1,5 @@
 from typing import List, Optional, Tuple
 
-import numpy as np
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 from scale_score.utils import get_flan_T5_model, scale_retrieve, scale_score
