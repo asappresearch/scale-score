@@ -29,9 +29,9 @@ for i in tqdm(range(len(convo))):
     t0=time.time()
     results = fetch.retrieve([convo[i]], [[summary]], branches=2)
     t1 = time.time()
-    rel_utt_idx = convo_for_mod[i].index(results['utts'][0][0])
+    rel_utt_idx = convo_for_mod[i].index(results[0][0])
     rank_list.append(rel_utt_idx)
-    scores.append(results['scores'][0])
+    scores.append(results[0][1])
      
     r1 = int(rank_list[0] in rel_utts[i])
     retrieval = [r1]
