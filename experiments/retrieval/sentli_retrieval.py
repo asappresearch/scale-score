@@ -7,7 +7,6 @@ from scipy.stats import kendalltau, pearsonr, spearmanr
 from sklearn.metrics import f1_score
 from tqdm import tqdm
 from transformers import T5ForConditionalGeneration, T5Tokenizer
-from typing import List, Optional
 
 
 def get_chunks(
@@ -520,9 +519,7 @@ def score(
     return results
 
 
-
 class SentliScorer:
-
     def __init__(
         self, size: str = "xl", model_path: Optional[str] = None, device: "str" = "cuda"
     ) -> None:

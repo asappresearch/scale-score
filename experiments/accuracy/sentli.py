@@ -1,14 +1,14 @@
-from typing import List, Optional
-from transformers import AutoConfig, AutoTokenizer, AutoModelForSeq2SeqLM
 import math
 from typing import List, Optional, Tuple
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+
+import nltk
 import numpy as np
 import torch
 from scipy.stats import kendalltau, pearsonr, spearmanr
 from sklearn.metrics import f1_score
 from tqdm import tqdm
-import nltk
+from transformers import (AutoConfig, AutoModelForSeq2SeqLM, AutoTokenizer,
+                          T5ForConditionalGeneration, T5Tokenizer)
 
 
 def run_model(
@@ -22,7 +22,9 @@ def run_model(
     device: str,
 ) -> List[float]:
     fulltext = prompt.replace("{{premise}}", premise)
-    full_tokens = tokenizer(fulltext, return_tensors="pt", truncation=True, max_length=512).input_ids
+    full_tokens = tokenizer(
+        fulltext, return_tensors="pt", truncation=True, max_length=512
+    ).input_ids
     input_ids = full_tokens.to(device)
     outputs = model.generate(
         input_ids,
@@ -33,6 +35,7 @@ def run_model(
     scores = outputs["scores"][0][0][yes_no_tokens]
     results = torch.nn.functional.softmax(scores, dim=0)[0].item()
     return results
+
 
 def get_flan_T5_model(
     size: str, model_path: Optional[str] = None
@@ -84,7 +87,7 @@ def sentli_score(
     yes_no_tokens = [tokenizer("Yes").input_ids[0], tokenizer("No").input_ids[0]]
     prompt = '{{premise}} Question: Does this imply that "{{hypothesis}}"? Yes or no?'
 
-    results: dict = {"P": [], "P_structured": [], 'label':[]}
+    results: dict = {"P": [], "P_structured": [], "label": []}
 
     for i in tqdm(range(len(convo))):
         summ_scores_precision = []
@@ -96,31 +99,29 @@ def sentli_score(
             chunk_results = []
             for utterance in convo_list:
                 chunk_results.append(
-                        run_model(
-                            model,
-                            tokenizer,
-                            utterance,
-                            prompt_part_filled,
-                            chunk_size,
-                            window_size,
-                            yes_no_tokens,
-                            device,
-                        )
+                    run_model(
+                        model,
+                        tokenizer,
+                        utterance,
+                        prompt_part_filled,
+                        chunk_size,
+                        window_size,
+                        yes_no_tokens,
+                        device,
                     )
+                )
             sc_max = max(chunk_results)
             sc_min = min(chunk_results)
-            sc = [sc_max, sc_min][np.argmax([sc_max, 1-sc_min])]
-            lab = int(np.argmax([1-sc_min, sc_max]))
-            
+            sc = [sc_max, sc_min][np.argmax([sc_max, 1 - sc_min])]
+            lab = int(np.argmax([1 - sc_min, sc_max]))
+
             summ_scores_precision.append(sc)
             results["P"].append(sc)
-            results['label'].append(lab)
+            results["label"].append(lab)
 
         results["P_structured"].append(summ_scores_precision)
 
     return results
-
-
 
 
 def score(
@@ -203,7 +204,6 @@ def score(
     )
 
     return results
-
 
 
 class SentliScorer:
