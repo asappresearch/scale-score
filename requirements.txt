@@ -1,5 +1,5 @@
-torch
-transformers
+transformers>=4.21.1
+torch>=1.10.0
 numpy>=1.22.4
 tqdm>=4.64.1
 sentencepiece>=0.1.97
