@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="scale-score",
-    version="0.0.0",
+    version="0.0.1",
     author="Barrett Lattimer, Patrick Chen, Xinyuan Zhang, Yi Yang",
     author_email="blattimer@asapp.com",
     description="Implementation of SCALE metric and ScreenEval",
