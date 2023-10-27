@@ -1,5 +1,11 @@
 # Fast and Accurate Factual Inconsistency Detection Over Long Documents
+Barrett Martin Lattimer, Patrick Chen, Xinyuan Zhang, Yi Yang
 
+blattimer@asapp.com
+
+EMNLP 2023
+
+https://arxiv.org/abs/2310.13189
 ## Overview
 Introducing SCALE, an reference-free NLI based factual inconsistency detection method, and ScreenEval, the longest dialogue based dataset for factual inconsistency detection presently available.
 Both can be found in our paper Fast and Accurate Factual Inconsistency Detection Over Long Documents.
@@ -12,6 +18,10 @@ This metrics outputs the estimated probablility that a hypothesis is supported b
 
 ### Install
 To use the evaluation metric, first pip install the python module. 
+```
+pip install scale-score
+```
+or install from source
 ```
 pip install -e .
 ```
@@ -148,3 +158,17 @@ These arguments are the exact same for both `retrieve` and `scorer.retrieve` fun
 
 
 ## ScreenEval
+ScreenEval is located in the `data` folder stored as a json file. The following keys are important for the use of ScreenEval.
+
+| Key  | Type | Description |
+| ------ | ------ | ------ |
+| original_convo | List[str] | The source document that is to be summarized as a string |
+| convo | List[List[str]] | The source document that is to be summarized split into a list of utterances |
+| inferred_summary | List[str] | The summary sentence that is paired with the given source document |
+| summary_id | List[str] | The source model for the summary sentence |
+| convo_id | List[int] | The ID of the source document |
+| annotated_summary | List[str] | The entire associated summary, with the focus summary sentence surrounded by `<mark><\mark>`|
+| prediction_annotated_source_doc | List[str] | Raw source document |
+| agreement | List[float] | Annotator agreement on summary sentence facutal inconsistency label |
+| agg_label | List[bool] | Factual inconsistency label (true -> factually consistent, false -> factually inconsistent) |
+| rel_utt | List[List[int]] | The indices of related utterances in the corresponding `convo` list.
