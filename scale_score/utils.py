@@ -297,7 +297,7 @@ def scale_score(
         - :param: 'results' (list): List of shape (N) where N = number of hypothesis of floats
     """
     yes_no_tokens = [tokenizer("Yes").input_ids[0], tokenizer("No").input_ids[0]]
-    prompt = '{{premise}} Question: Does this imply that "{{hypothesis}}"? Yes or no?'
+    prompt = '{{premise}} Question: Does this imply that "{{hypothesis}}"? Yes or No?'
 
     results = []
 
@@ -343,7 +343,7 @@ def scale_retrieve(
         - :param: 'results': List[Tuple[str, float]] a list of the retrieved most relevant unit from the premise for each hypothesis
     """
     yes_no_tokens = [tokenizer("Yes").input_ids[0], tokenizer("No").input_ids[0]]
-    prompt = '{{premise}} Question: Does this imply that "{{hypothesis}}"? Yes or no?'
+    prompt = '{{premise}} Question: Does this imply that "{{hypothesis}}"? Yes or No?'
     results = []
     for i in range(len(premise)):
         # Precision calculation
