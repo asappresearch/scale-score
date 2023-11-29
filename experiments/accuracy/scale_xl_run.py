@@ -23,4 +23,4 @@ res = scorer.score(convo, inf_summ)
 t1 = time.time()
 
 with open(f"results/scale_{size}_results.json", "w") as file:
-    json.dump([res["P"], label, t1 - t0], file)
+    json.dump([res, label, t1 - t0], file)

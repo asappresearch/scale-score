@@ -24,4 +24,4 @@ for chunk_size in tqdm([100, 300, 500, 750, 1000, 2000, 3000]):
     t1 = time.time()
 
     with open(f"results/scale_{size}_{chunk_size}_results.json", "w") as file:
-        json.dump([res["P"], label, t1 - t0], file)
+        json.dump([res, label, t1 - t0], file)
