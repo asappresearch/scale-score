@@ -8,7 +8,7 @@ from scale_score.utils import get_flan_T5_model, scale_retrieve, scale_score
 def score(
     premise: List[str],
     hypothesis: List[List[str]],
-    chunk_size: int = 512,
+    chunk_size: int = 1000,
     window_size: float = 0.25,
     size: str = "xl",
     device: str = "cuda",

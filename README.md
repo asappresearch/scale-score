@@ -66,7 +66,7 @@ These arguments are the exact same for both `score` and `scorer.score` functions
 | ------ | ------ | ------ | ------ |
 | premise | List[str] | required | premise text, the ground truth |
 | hypothesis | List[List[str]] | required | hypothesis text, usually the text predicted by a model being evaluated |
-| chunk_size | int | 512 | The size of the chunks used to perform chunking on the premise |
+| chunk_size | int | 1000 | The size of the chunks used to perform chunking on the premise |
 | window_size | float | 0.25 | The percentage of overlap between chunks. 0&le;window_size&lt;1 |
 | size | str | 'xl' | Size of Flan-T5 model, options are 'small', 'base', 'large', 'xl', 'xxl' |
 | device | str | 'cuda' | torch device to send the model to. |

@@ -93,7 +93,7 @@ def run_model_chunks(
     prompt: str,
     yes_no_tokens: List[int],
     device: str,
-    chunk_size: int = 512,
+    chunk_size: int = 1000,
     window_size: float = 0.25,
     branches: Optional[int] = None,
 ) -> Tuple[List[float], Optional[List[List[str]]]]:
@@ -279,7 +279,7 @@ def scale_score(
     premise: List[str],
     hypothesis: List[List[str]],
     device: str = "cuda",
-    chunk_size: int = 512,
+    chunk_size: int = 1000,
     window_size: float = 0.25,
 ) -> List[float]:
     """

@@ -31,7 +31,7 @@ class SCALEScorer:
         self,
         premise: List[str],
         hypothesis: List[List[str]],
-        chunk_size: int = 512,
+        chunk_size: int = 1000,
         window_size: float = 0.25,
     ) -> List[float]:
         """
