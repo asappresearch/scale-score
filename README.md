@@ -14,7 +14,7 @@ SCALE uses a novel chunking strategy to achieve state-of-the-art factual inconsi
 
 ## SCALE
 
-This metrics outputs the estimated probablility that a hypothesis is supported by a given premise *SCALE(premise, hypothesis)*. Commonly the hypothesis is generated text and the premise is some ground truth text. For example, a premise may be a document and the hypothesis may be a language model generated summary sentence. The score is bounded as follows 0&le;*SCALE(premise, hypothesis)*&le;1. A higher score signifies a higher probability the hypothesis is factually consistent with the premise. A lower score signifies the hypothesis is more likely to be factually inconsistent with the premise. It is recommended to use Flan_T5_XL as the base model for the best results. 
+This metrics outputs the estimated probablility that a hypothesis is supported by a given premise *SCALE(premise, hypothesis)*. Commonly the hypothesis is generated text and the premise is some ground truth text. For example, a premise may be a document and the hypothesis may be a language model generated summary sentence. The score is bounded as follows 0&le;*SCALE(premise, hypothesis)*&le;1. A higher score signifies a higher probability the hypothesis is factually consistent with the premise. A lower score signifies the hypothesis is more likely to be factually inconsistent with the premise. **It is recommended to use Flan_T5_XL or Flan_T5_Large as the base model for the best results. Note: Using Flan_T5_Small as a base model will not result in accurate scores unless finetuned.**
 
 ### Install
 To use the evaluation metric, first pip install the python module. 
@@ -57,7 +57,7 @@ results = [
 You can also use the `scorer` object to prevent loading the model at every call like so,
 ```python
 from scale_score.scorer import SCALEScorer
-scorer = SCALEScorer(size='small', device='cuda')
+scorer = SCALEScorer(size='large', device='cuda')
 results = scorer.score(premise, hypothesis)
 ```
 #### *Arguments*
@@ -68,7 +68,7 @@ These arguments are the exact same for both `score` and `scorer.score` functions
 | hypothesis | List[List[str]] | required | hypothesis text, usually the text predicted by a model being evaluated |
 | chunk_size | int | 1000 | The size of the chunks used to perform chunking on the premise |
 | window_size | float | 0.25 | The percentage of overlap between chunks. 0&le;window_size&lt;1 |
-| size | str | 'xl' | Size of Flan-T5 model, options are 'small', 'base', 'large', 'xl', 'xxl' |
+| size | str | 'xl' | Size of Flan-T5 model, options are 'small', 'base', 'large', 'xl', 'xxl'. **Use 'large' or 'xl' for best results.**|
 | device | str | 'cuda' | torch device to send the model to. |
 | model_path | str | None | Optional path to a Flan-T5 model to load. Note the corresponding size must be specified in the *size* argument. |
 | model | T5ForConditionalGeneration | None | Optional model to use for scoring |
